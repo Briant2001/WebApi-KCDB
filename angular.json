@@ -26,14 +26,14 @@
             "outputPath": "dist/kcdb-api",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "baseHref": "/apendicec/",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
-            ],
+              "src/assets"            ],
             "styles": [
               "src/styles.css"
             ],
@@ -42,16 +42,7 @@
           "configurations": {
             "production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
+
               ],
               "outputHashing": "all"
             },

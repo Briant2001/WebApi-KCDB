@@ -1,0 +1,52 @@
+<!-- BEGIN: Large Modal Content -->
+<div #modalContainer id="large-modal-size-preview" class="modal overflow-y-auto ">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content p-3 relative" style="width: 700px;" *ngIf="servicioData">
+      <div class="flex flex-row-reverse items-center "><button class="btn btn-danger" (click)="cerrar()">x</button></div>
+      <div class="text-slate-500 font-semibold text-[16px]">
+        <p class="m-1">{{servicioData.quantityValue}}, {{servicioData.subServiceValue}}:
+          <span class="font-bold text-slate-700">{{servicioData.cmc.lowerLimit}}
+          {{servicioData.cmc.unit}} {{servicioData.cmc.upperLimit}} {{servicioData.cmc.unit}}</span>
+        </p>
+        <p class="m-1">{{servicioData.instrument}}</p>
+
+        <p class="m-1">{{servicioData.uncertaintyMode}} expanded uncertainty</p>
+
+        <p class="m-1" [innerHTML]="servicioData.uncertaintyEquation.equation"></p>
+
+        <div class="m-1" [innerHTML]="servicioData.uncertaintyEquation.equationComment"></div>
+
+        <p class="m-1">{{servicioData.instrumentMethod}}</p>
+
+        <!-- <p class="m-1" *ngIf="servicioData.parameters.length>0">
+          {{servicioData.parameters[0].parameterName}} {{servicioData.parameters[0].parameterValue}}
+        </p> -->
+
+        <p class="m-1">Approved on {{servicioData.approvalDate}}</p>
+        <p class="m-1">Institute service identifier: {{servicioData.nmiServiceCode}}</p>
+        <a target="_blank"  [href]="'https://si-digital-framework.org/kcdb-cmc/'+servicioData.kcdbCode" class="m-1 underline">CMC ID: {{servicioData.kcdbCode}}</a>
+
+      </div>
+      <!-- <p>{{servicioData?.serviceValue}}, {{servicioData?.subServiceValue}}:
+        <span>
+          {{servicioData?.cmc?.lowerLimit}} {{servicioData?.cmc?.unit}} {{servicioData?.cmc?.upperLimit}} {{servicioData?.cmc?.unit}}
+        </span>
+      </p> -->
+      <!-- <p>{{servicioData?.instrument}}</p>
+      <p>{{servicioData?.uncertaintyMode}}</p>
+      <div class="flex fle-row item-center">
+        <p [innerHTML]="servicioData?.uncertaintyEquation?.equation "> </p>;
+        <p class="w-50" [innerHTML]="servicioData?.uncertaintyEquation?.equationComment"></p>
+      </div>
+
+      <p>{{servicioData?.instrumentMethod}}</p>
+      <p>{{servicioData!.parameters[0].parameterName}}:
+         {{servicioData!.parameters[0].parameterValue}}</p> -->
+    </div>
+  </div>
+
+
+</div> <!-- END: Large Modal Content -->
+<!--
+<servicios-view-pdf *ngIf="nombreArchivo" [nombreArchivo]="nombreArchivo" [programacion]="item"
+  (eventCerrar)="clear()"></servicios-view-pdf> -->

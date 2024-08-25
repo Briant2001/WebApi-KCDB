@@ -1,0 +1,164 @@
+<div class="w-full h-full">
+  <div
+    style="background-image: url(https://www.bipm.org/kcdb/static/img/header-bg-11bf7d6685fa30bfc47c43738128b3c3.jpg);"
+    class="flex flex-col justify-around items-center p-4 bg-[#004382] text-slate-100
+         h-[calc(20%)] max-[1080px]:h-[calc(15%)] relative">
+
+    <div class="absolute left-2 max-[1080px]:top-6 ">
+      <img style="filter: drop-shadow(0 0.2rem 0.25rem rgba(255, 255, 255, 0.8))"
+        src="https://www.bipm.org/documents/20126/27072194/KCDB2.0.png/9c3242fe-9354-00c8-2015-cff907504719?t=1581073267483"
+        alt="kcdb-img" class="max-[1080px]:w-[165px] w-[260px]">
+    </div>
+    <div class="absolute right-2 max-[1080px]:top-4  ">
+      <img src="assets/CENAM Blanco.png" class="max-[1080px]:w-[110px] w-[180px]" alt="cenam-img">
+    </div>
+    <div class="flex flex-col justify-around items-center w-1/2 bg-[#e7e8e9]
+              rounded shadow-md px-4 max-[1080px]:py-3 py-6 max-[1080px]:mt-6 mt-12">
+      <a class="max-[1080px]:text-xl text-xl text-slate-600  font-bold underline" target="_blank"
+        href="https://www.bipm.org/api/kcdb/swagger-ui/index.html?configUrl=/api/kcdb/v3/api-docs/swagger-config#/">API
+        KCDB</a>
+      <h2 class="max-[1080px]:text-lg text-xl text-slate-500 font-medium mr-5 tex">
+        México, CENAM (Centro Nacional de Metrología)
+      </h2>
+      <p class="text-slate-500 text-justify font-semibold max-[1080px]:text-[14px] text-base">
+        Todos los datos incluidos en la KCDB han sido revisados ​​y aprobados de conformidad con el Acuerdo de
+        Reconocimiento Mutuo del CIPM.
+
+      </p>
+    </div>
+  </div>
+  <div class="px-5 max-[1080px]:mt-28 mt-28  h-[calc(85%-112px)] ">
+    <div *ngIf="domainsData; else carga" class="grid grid-cols-12 gap-6">
+      <div class="col-span-12 ">
+        <div class="grid grid-cols-12 gap-6 mt-5">
+          <div class="col-span-12 sm:col-span-4 xl:col-span-4 intro-y" *ngFor="let item of domainsData?.domains">
+            <div class=" zoom-in">
+              <div class="box p-5 h-52" (click)="getMetroloyArea(item.code.trim())">
+                <div class="text-3xl font-medium leading-8 mt-6">{{item.code | espanol}}</div>
+                <div class="text-base text-slate-500 mt-1">{{item.code}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-row mt-12">
+      <div class="intro-y col-span-12 flex-1">
+        <h1 class="text-lg text-slate-600 font-bold">FISICA({{totalAreaP}})</h1>
+        <div id="basic-accordion" class="p-5">
+          <div class="preview">
+            <div id="faq-accordion-1" class="accordion" *ngIf="quick;else e">
+              <div class="accordion-item" *ngFor="let item of areaMetrologia">
+                <div id="faq-accordion-content-1"
+                  class="hover:bg-slate-300 p-2 rounded accordion-header flex flex-row  items-center">
+                  <button class="accordion-button collapsed flex flex-row items-center" type="button"
+                    (click)="countServicios(item.label,div)">
+                    {{item.label | totalPhysics}} {{item.value}} - <p [id]="item.label"></p>
+                  </button>
+                  <span class="text-gray-500">▼</span>
+                </div>
+                <div #div class="accordion-collapse collapse" style="display: none;">
+                  <p #total></p>
+                  <div style="display: none;">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                          <th scope="col" class="text-base px-6 py-3">
+                            Rama
+                          </th>
+                          <th scope="col" class="text-base px-6 py-3">
+                            Cantidad
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody >
+
+                        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700" *ngFor="let item of branchData[item.label]">
+                          <td class="px-6 py-4 font-semibold">{{item.value}}</td>
+                          <td class="px-6 py-4 font-semibold"></td>
+                        </tr>
+
+                        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700" >
+                          <td class="px-6 py-4 font-extrabold">Total</td>
+                          <td class="px-6 py-4 font-extrabold"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <ng-template #e>Consultando...</ng-template>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="intro-y col-span-12  flex-1">
+        <h1 class="text-lg text-slate-600 font-bold">Química y Biología({{totalAreaC}})</h1>
+        <div id="basic-accordion" class="p-5">
+          <div class="preview">
+            <div id="faq-accordion-1" class="accordion" *ngIf="quick;else e">
+              <div class="accordion-item" *ngFor="let item of categorias">
+                <div id="faq-accordion-content-1"
+                  class="hover:bg-slate-300 p-2 rounded accordion-header flex flex-row justify-between items-center">
+                  <button class="accordion-button collapsed flex flex-row " type="button"
+                    (click)="countServiciosChembio(item.id,div)">
+                    {{item.id | totalchem}} {{item.value}} - <p [id]="item.id"></p>
+                  </button>
+                  <span class="text-gray-500">▼</span>
+
+
+                </div>
+                <div #div class="accordion-collapse collapse" style="display: none;">
+                  <p #total></p>
+                  <p #total></p>
+                  <div style="" *ngIf="analitos.length > 0">
+                    <table class="table table-report -mt-2">
+                      <thead>
+                        <tr>
+                          <th class="text-center whitespace-nowrap">Analito</th>
+                          <th class="text-center whitespace-nowrap">Cantidad</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <tr class="intro-x" *ngFor="let item of analitos">
+                          <td class="font-medium w-11 text-center">{{item.value}}</td>
+                          <td class="font-medium w-11 text-center"></td>
+                        </tr>
+                        <tr>
+                          <td class="font-medium w-11 text-center">Total</td>
+                          <td class="w-11 text-center font-bold"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+              <ng-template #e>Consultando...</ng-template>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <ng-template #carga>
+
+      <div class="mt-20">
+        <p class="text-slate-500">Cargando Listado de áreas de metrología...</p>
+      </div>
+
+    </ng-template>
+
+
+
+  </div>
+</div>

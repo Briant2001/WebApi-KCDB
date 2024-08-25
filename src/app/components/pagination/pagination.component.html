@@ -1,0 +1,27 @@
+<div class="intro-y box bg select-none">
+  <div class="preview mx-auto h-[120px] w-[300px] relative flex flex-row">
+    <button #button (click)="next()" class="text-3xl text-slate-600 select-none">
+      <
+    </button>
+
+    <div class="w-[174px] h-[100px] py-4 mx-auto overflow-hidden">
+
+      <div *ngIf="numberItems"  #pagination class="flex flex-row transition-all ease-linear">
+
+        <div #items *ngFor="let item of arrayCantidad; let  i = index"
+          class="w-[50px] h-[50px] mr-[8px] rounded-full  hover:bg-[#3b82f6]" (click)="onSelected($event)">
+          <h3 class="w-[50px] select-none h-[50px] py-[8px] font-bold text-center text-xl  rounded-full cursor-pointer">
+            <input style="display: none;" type="number" [value]="i+1">
+            {{i+1}}
+          </h3>
+        </div>
+
+      </div>
+
+    </div>
+
+    <button #button (click)="back()" class="select-none text-3xl text-slate-600">
+      >
+    </button>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+.filter-result__main-table {
+  max-width: 590px;
+}
+
+.filter-result__main-table-cell[rowspan="2"], .filter-result__main-table-cell[colspan="2"] {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.filter-result__main-table-cell {
+  min-width: 80px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 24px;
+}

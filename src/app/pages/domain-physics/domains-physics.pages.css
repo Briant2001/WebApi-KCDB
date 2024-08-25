@@ -1,0 +1,10 @@
+@media (max-width: 1400px) {
+  *{
+    font-size: 12px;
+
+  }
+
+  td{
+    padding: 5px;
+  }
+}
