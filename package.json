@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:href": "ng build --base-href /apendicec/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
