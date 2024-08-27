@@ -1,7 +1,7 @@
 <!-- BEGIN: Large Modal Content -->
 <div #modalContainer id="large-modal-size-preview" class="modal overflow-y-auto ">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content p-3 relative" style="width: 700px;" *ngIf="servicioData">
+    <div class="modal-content p-3 relative" *ngIf="servicioData">
       <div class="flex flex-row-reverse items-center "><button class="btn btn-danger" (click)="cerrar()">x</button></div>
       <div class="text-slate-500 font-semibold text-[16px]">
         <p class="m-1">{{servicioData.quantityValue}}, {{servicioData.subServiceValue}}:

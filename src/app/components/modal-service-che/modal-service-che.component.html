@@ -1,13 +1,13 @@
 <!-- BEGIN: Large Modal Content -->
 <div #modalContainer id="large-modal-size-preview" class="modal overflow-y-auto ">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content p-3 relative flex flex-col items-center" style="width: 700px;" *ngIf="servicioData">
+    <div class="modal-content p-3 relative flex flex-col items-center" *ngIf="servicioData">
 
       <div class="flex flex-row-reverse w-full">
         <button class="btn btn-danger" (click)="cerrar()">x</button>
       </div>
 
-      <div class="overflow-auto mt-2">
+      <div class="overflow-auto mt-2 w-full">
         <table border="0" cellpadding="3" cellspacing="3" class="w-full mx-auto" width="100%">
           <tbody>
             <tr class="filter-result__main-table-row">
