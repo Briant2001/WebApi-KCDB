@@ -55,7 +55,7 @@ export class KCDBServices {
       keywords,
       includedFilters,
     }
-    console.log(body)
+
 
     return this.httpClient.post<QuickSearch>(`${this._baseURLKCDB}/cmc/searchData/quickSearch`, body)
   }

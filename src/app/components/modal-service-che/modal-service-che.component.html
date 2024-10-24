@@ -1,10 +1,10 @@
 <!-- BEGIN: Large Modal Content -->
-<div #modalContainer id="large-modal-size-preview" class="modal overflow-y-auto ">
+<div #modalContainer id="large-modal-size-preview" class="modal overflow-y-auto " (click)="click($event)">
   <div class="modal-dialog modal-lg">
     <div class="modal-content p-3 relative flex flex-col items-center" *ngIf="servicioData">
 
-      <div class="flex flex-row-reverse w-full">
-        <button class="btn btn-danger" (click)="cerrar()">x</button>
+      <div class="flex flex-row-reverse justify-between w-full">
+        <button class="btn btn-danger h-[30px] w-[50px]" (click)="cerrar()">x</button>
       </div>
 
       <div class="overflow-auto mt-2 w-full">
@@ -12,33 +12,41 @@
           <tbody>
             <tr class="filter-result__main-table-row">
               <td class="filter-result__main-table-cell" rowspan="2">Matrix or material</td>
-
+              <td class="filter-result__main-table-cell" rowspan="2">Analyte or component</td>
               <td class="filter-result__main-table-cell" colspan="2">Dissemination range of measurement capability</td>
               <td class="filter-result__main-table-cell" colspan="2">Range of certified values in reference materials
               </td>
             </tr>
 
             <tr class="filter-result__main-table-row">
-              <td class="filter-result__main-table-cell">{{servicioData.quantityValue}} in </td>
+              <td class="filter-result__main-table-cell">{{servicioData.quantityValue}} <span *ngIf="servicioData.cmc.unit != '(dimensionless)' ">in</span> {{servicioData.cmc.unit}}</td>
               <!-- <td class="filter-result__main-table-cell">{{servicioData.quantityValue}} in {{servicioData.cmc.unit}}</td> -->
-              <td class="filter-result__main-table-cell">{{servicioData.uncertaintyMode}} expanded uncertainty in
+              <td class="filter-result__main-table-cell">{{servicioData.uncertaintyMode}} expanded uncertainty <span *ngIf="servicioData.cmcUncertainty.unit != '(dimensionless)'">in</span>
                 {{servicioData.cmcUncertainty.unit}}</td>
-              <td class="filter-result__main-table-cell">{{servicioData.quantityValue}} in {{servicioData.crm.unit}}</td>
-              <td class="filter-result__main-table-cell">{{servicioData.uncertaintyMode}} expanded uncertainty in {{servicioData.crmUncertainty.unit}}</td>
+              <td class="filter-result__main-table-cell">{{servicioData.quantityValue}} <span *ngIf="servicioData.crm.unit != '(dimensionless)'">in</span> {{servicioData.crm.unit}}
+              </td>
+              <td class="filter-result__main-table-cell">{{servicioData.uncertaintyMode}} expanded uncertainty <span *ngIf="servicioData.crmUncertainty.unit != '(dimensionless)'">in</span>
+                {{servicioData.crmUncertainty.unit}}</td>
             </tr>
 
             <tr class="filter-result__main-table-row">
-              <td class="filter-result__main-table-cell">aqueous solution</td>
+              <td class="filter-result__main-table-cell">{{servicioData.analyteMatrix}}</td>
+              <td class="filter-result__main-table-cell">{{servicioData.analyteValue}}</td>
 
-              <td class="filter-result__main-table-cell">{{servicioData.cmc.lowerLimit}} to
-                {{servicioData.cmc.upperLimit}}</td>
-              <td class="filter-result__main-table-cell">{{servicioData.cmcUncertainty.lowerLimit}} to
-                {{servicioData.cmcUncertainty.upperLimit}}</td>
+              <td class="filter-result__main-table-cell">{{servicioData.cmc.lowerLimit}} <span
+                  *ngIf="servicioData.cmc.upperLimit">to {{servicioData.cmc.upperLimit}} </span> </td>
 
-              <td class="filter-result__main-table-cell">{{servicioData.crm.lowerLimit}} to {{servicioData.crm.upperLimit}}
+              <td class="filter-result__main-table-cell">{{servicioData.cmcUncertainty.lowerLimit}} <span
+                  *ngIf="servicioData.cmcUncertainty.upperLimit">to {{servicioData.cmcUncertainty.upperLimit}}</span>
               </td>
-              <td class="filter-result__main-table-cell">{{servicioData.crmUncertainty.lowerLimit}} to
-                {{servicioData.crmUncertainty.upperLimit}}</td>
+
+              <td class="filter-result__main-table-cell">{{servicioData.crm.lowerLimit}} <span
+                  *ngIf="servicioData.crm.upperLimit">to {{servicioData.crm.upperLimit}}</span>
+              </td>
+
+              <td class="filter-result__main-table-cell">{{servicioData.crmUncertainty.lowerLimit}} <span
+                  *ngIf="servicioData.crmUncertainty.upperLimit">to {{servicioData.crmUncertainty.upperLimit}}</span>
+              </td>
             </tr>
 
 
@@ -47,17 +55,25 @@
       </div>
 
 
-      <div class="text-slate-500 font-semibold text-[16px] mt-2">
+      <div class="text-gray-500 font-sans text-[16px] mt-2">
 
-        <p class="m-1">Mechanism for measurement service delivery: {{servicioData.mechanism}}</p>
+        <p class="m-1 mb-1">Mechanism for measurement service delivery: <span
+            class="font-semibold">{{servicioData.mechanism}}</span></p>
 
         <!-- <p class="m-1">{{servicioData.instrument}}</p> -->
-        <p class="m-1" [innerHTML]="servicioData.comments"></p>
-        <p class="m-1">Approved on {{servicioData.approvalDate}}</p>
-        <p class="m-1">Institute service identifier: {{servicioData.nmiServiceCode}}</p>
-        <a target="_blank" [href]="'https://si-digital-framework.org/kcdb-cmc/'+servicioData.kcdbCode"
-          class="m-1 underline">CMC ID: {{servicioData.kcdbCode}}</a>
+        <p class="m-1 mb-0.5" [innerHTML]="servicioData.comments"></p>
+        <p class="m-1 mb-0.5">Approved on <span class="font-semibold">{{servicioData.approvalDate}}</span></p>
+        <p class="m-1 mb-2">Institute service identifier: <span
+            class="font-semibold">{{servicioData.nmiServiceCode}}</span></p>
+        <div class="flex flex-row items-center">
+          <a target="_blank" [href]="'https://si-digital-framework.org/kcdb-cmc/'+servicioData.kcdbCode"
+            class="m-1 text-xs px-[13px] py-1 h-[25px] font-semibold text-slate-50 underline rounded-lg bg-green-400 mr-2">CMC
+            ID: {{servicioData.kcdbCode}}</a>
+          <a target="_blank" [href]="'https://www.bipm.org/kcdb/cmc/quick-search?keywords='+servicioData.kcdbCode"
+            class="text-xs px-[13px] py-1 h-[25px] font-semibold text-slate-50 underline rounded-lg bg-slate-400">Publicado
+            en la KCDB</a>
 
+        </div>
       </div>
     </div>
   </div>

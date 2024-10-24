@@ -61,7 +61,6 @@ export class DomainCHEMBIOService {
       ],
     }
 
-
     return this.httpClient.post<QuickSearch>(`${this._baseURLKCDB}/cmc/searchData/quickSearch`, body).pipe(
       tap(result => {
         localStorage.setItem("serviciosChembio", JSON.stringify(result.data))

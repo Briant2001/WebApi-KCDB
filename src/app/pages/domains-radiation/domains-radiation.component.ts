@@ -83,8 +83,9 @@ export class DomainsRadiationComponent {
   }
 
   private getDataPhysics(numPage: number = 0) {
-    this.totalItems = 0
+    this.totalItems = 0;
     this.servicioData=[];
+    this.sin = false;
     this.kcdbService.getSearchDataPhysics({
       page: numPage,
       pageSize: 20,
@@ -118,11 +119,13 @@ export class DomainsRadiationComponent {
   private getDataPhysicsTodos(numPage: number = 0) {
     this.totalItems = 0
     this.servicioData=[];
+    this.totalItems = 0;
     this.kcdbService.getQuickSearch(
       numPage,20,"mexico").subscribe(
       res => {
         this.numPaginas = res.totalPages;
-        this.totalItems =res.totalElements;
+        this.totalItems = res.totalElements;
+        this.selectNumber = res.pageNumber +1;
         res.data = res.data.map(res=> {
           const tempDiv = document.createElement('div');
           const tempDiv2 = document.createElement('div');
@@ -172,7 +175,8 @@ export class DomainsRadiationComponent {
   }
 
   selectBranch() {
-
+    this.numPaginas = 0;
+    this.selectNumber = 0;
     const select = this.branch.filter(e => e.id.toString() == this.branchId)[0];
     this.branchLabel = select.label;
     this.getDataPhysics();
@@ -193,6 +197,9 @@ export class DomainsRadiationComponent {
 
   debounceNum(num: number) {
     num = num - 1;
+    if (this.numPaginas == 1) {
+      return
+    }
     this.servicioData = [];
     this.selectNumber = num + 1;
 
@@ -204,16 +211,30 @@ export class DomainsRadiationComponent {
 
     this.getDataPhysics(num);
   }
+  isVacio(query: string){
+    query = query.trim();
+    if (query == '') {
+      this.sin =false;
+      this.numPaginas= 0;
+      this.getDataPhysics();
+
+    }
+  }
 
   search(query: string) {
+    query = query.trim();
     this.servicioData = [];
+    this.numPaginas = 0;
+    this.selectNumber = 0;
+    this.totalItems = 0;
+
     this.kcdbService.getQuickSearch(0,20,query).subscribe(res=>{
 
       if (res.data.length == 0) {
         this.sin = true;
         return
       }
-
+      this.totalItems = res.totalElements;
       this.servicioData = res.data;
       const id = this.areaMetrologia.filter(e=> e.label == this.servicioData[0].metrologyAreaLabel);
       this.areaMetrologiaId = id[0].id.toString()

@@ -86,6 +86,8 @@ export class DomainCHEMBIOComponent {
   private getDataChem(num: number = 0) {
     this.servicioData = [];
     this.totalItems = 0;
+    this.sin = false;
+
     this.kcdbChemService.getSearchDataCHEMBIO({
       page: num,
       pageSize: 20,
@@ -101,11 +103,14 @@ export class DomainCHEMBIOComponent {
 
           return
         }
-        this.numPaginas = res.totalPages;
+
         this.totalItems = res.totalElements;
+        this.numPaginas = res.totalPages;
+        this.selectNumber = res.pageNumber+1;
+
         res.data = res.data.map(res => {
           const tempDiv = document.createElement('div');
-          tempDiv.innerHTML = res.cmc.unit;
+          tempDiv.innerHTML = res.cmc.unit!;
           res.cmc.unit = tempDiv.innerText;
 
           return res
@@ -173,13 +178,12 @@ export class DomainCHEMBIOComponent {
   }
 
   selectCategorias() {
+    this.numPaginas = 0;
     const select = this.categorias.filter(e => e.value.toString() == this.categoriaId)[0];
     this.categoriaLabel = select.label;
 
     this.getDataChem()
-    // this.kcdbService.getService(this.categoriaId.trim()).subscribe(result => {
-    //   this.service = result.referenceData;
-    // })
+
   }
 
   selectService() {
@@ -205,14 +209,16 @@ export class DomainCHEMBIOComponent {
     // this.tres = select.label;
   }
 
-
-
   onClick(id: number) {
     this.selectServiceModal = this.servicioData.filter((e: any) => e.id == id)[0];
   }
 
   debounceNum(num: number) {
     num = num - 1;
+    if (this.numPaginas == 1) {
+      return
+    }
+
     this.servicioData = [];
     this.selectNumber = num + 1;
 
@@ -223,33 +229,32 @@ export class DomainCHEMBIOComponent {
     this.getDataChem(num)
   }
 
+  isVacio(query: string){
+    query = query.trim();
+
+    if (query == '') {
+      this.sin =false;
+      this.numPaginas= 0;
+      this.getDataChem();
+    }
+
+  }
+
   search(query: string) {
-
+    query = query.trim()
     this.servicioData = [];
+    this.numPaginas = 0;
+    this.totalItems = 0;
     this.kcdbChemService.getQuickSearch(0, query,20, ).subscribe(res => {
-
       if (res.data.length == 0) {
         this.sin = true;
         return
       }
-
+      this.totalItems = res.totalElements
       this.servicioData = res.data;
-      const id = this.areaMetrologia.filter(e => e.label == this.servicioData[0].metrologyAreaLabel);
-      this.areaMetrologiaId = id[0].id.toString()
-
-
-
+      this.numPaginas = res.totalPages;
+      this.sin = false;
     })
-
-    // const filter = JSON.parse(localStorage.getItem("serviciosChembio")!) as any[]
-
-    // this.servicioData = filter.filter(e => {
-    //   return String(e.kcdbCode).toLowerCase().includes(query.toLowerCase()) ||
-    //     String(e.nmiServiceCode).toLowerCase().includes(query.toLowerCase()) ||
-    //     String(e.categoryValue).toLowerCase().includes(query.toLowerCase()) ||
-    //     String(e.rmo).toLowerCase().includes(query.toLowerCase()) ||
-    //     String(e.subCategoryValue).toLowerCase().includes(query.toLowerCase())
-    // })
 
   }
 
