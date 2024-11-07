@@ -115,8 +115,8 @@
                 <div id="faq-accordion-content-1"
                   class="hover:bg-slate-300 p-2 rounded accordion-header flex flex-row justify-between items-center">
                   <button class="accordion-button collapsed flex flex-row " type="button"
-                    (click)="countServiciosChembio(item.id,div)">
-                    {{item.id | totalchem}} {{item.value}} - <p [id]="item.id"></p>
+                    (click)="countServiciosChembio(item.label,div)">
+                    {{item.label | totalchem}} {{item.value}} - <p [id]="item.label"></p>
                   </button>
                   <span class="text-gray-500">▼</span>
 

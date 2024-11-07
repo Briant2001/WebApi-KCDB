@@ -187,7 +187,7 @@ export class DomainsPagesComponent implements AfterViewInit, OnInit{
 
   }
 
-  countServiciosChembio(id: number, item: HTMLDivElement) {
+  countServiciosChembio(id: string, item: HTMLDivElement) {
     this.analitos = []
     if (item.classList.contains("show")) {
       this.show(item)
