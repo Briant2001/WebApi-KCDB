@@ -13,10 +13,9 @@ const routes:Routes = [
     path:"kcdb",
     component:LayoutComponent,
     children:[
-
       {
         path:"domains",
-        component:DomainsPagesComponent
+        component:DomainsPagesComponent,
       },
       {
         path:"metrologyArea/physics/:id",
