@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { KCDBServices } from '../../services/domains-physics.service';
-import { ActivatedRoute } from '@angular/router';
-import { Datum, ReferenceDatum, Servicio } from '../../interfaces/kcdb.models';
+import { Component } from '@angular/core';
 import { Subject } from 'rxjs';
+import {  ReferenceDatum, Servicio } from '../../../interfaces/kcdb.models';
+import { KCDBServices } from '../../../services/domains-physics.service';
+import { ActivatedRoute } from '@angular/router';
+import { RadiationKCDBService } from '../../../services/domain-radiation.service';
+import { Datum } from '../../../interfaces/kcdb.radiation.interface';
 
 @Component({
-  selector: 'app-metrology-area-pages',
-  templateUrl: './domains-physics.pages.html',
-  styleUrl: `./domains-physics.pages.css`
+  selector: 'app-domains-radiation',
+  templateUrl: './domains-radiation.component.html',
+  styles: ``
 })
-export class MetrologyAreaPagesComponent implements OnInit {
+export class DomainsRadiationComponent {
 
   public debounce: Subject<boolean> = new Subject();
 
@@ -20,7 +22,7 @@ export class MetrologyAreaPagesComponent implements OnInit {
 
   private physicsCode?: string;
 
-  public sin:boolean = false;
+  public sin : boolean=false;
   private dos = "";
   private tres = "";
 
@@ -52,7 +54,7 @@ export class MetrologyAreaPagesComponent implements OnInit {
   private keywords: string = "mexico"
   public selectNumber: number = 1;
 
-  constructor(private kcdbService: KCDBServices, private routerActive: ActivatedRoute) { }
+  constructor(private kcdbService: RadiationKCDBService, private routerActive: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.routerActive.params.subscribe(param => {
@@ -61,11 +63,16 @@ export class MetrologyAreaPagesComponent implements OnInit {
       this.kcdbService.getMetrologyArea(this.area).subscribe(
         results => {
           this.areaMetrologia = results.referenceData;
+          this.encabezado = this.areaMetrologia[0].value + ": ";
           this.metrologyAreaLabel = this.areaMetrologia[0].label;
           this.areaMetrologiaId = this.areaMetrologia[0].id.toString();
           this.kcdbService.getBranch(this.areaMetrologiaId.trim()).subscribe(
             result => {
               this.branch = result.referenceData;
+
+              // for (let index = 0; index < this.branch.length; index++) {
+              //   this.encabezado = this.encabezado + "  • " + this.branch[index].value
+              // }
             }
           )
           this.getDataPhysics()
@@ -76,12 +83,12 @@ export class MetrologyAreaPagesComponent implements OnInit {
   }
 
   private getDataPhysics(numPage: number = 0) {
-
-    this.servicioData=[];
     this.totalItems = 0;
+    this.servicioData=[];
+    this.sin = false;
     this.kcdbService.getSearchDataPhysics({
       page: numPage,
-      pageSize: 30,
+      pageSize: 20,
       metrologyAreaLabel: this.metrologyAreaLabel!,
       keywords: this.keywords,
       branchLabel:this.branchLabel
@@ -96,9 +103,11 @@ export class MetrologyAreaPagesComponent implements OnInit {
         this.selectNumber = res.pageNumber +1;
         res.data = res.data.map(res=> {
           const tempDiv = document.createElement('div');
+          const tempDiv2 = document.createElement('div');
           tempDiv.innerHTML = res.cmc.unit;
+          tempDiv2.innerHTML = res.radiationSpecification;
           res.cmc.unit = tempDiv.innerText;
-
+          res.radiationSpecification = tempDiv2.innerText;
           return res
         })
 
@@ -110,18 +119,23 @@ export class MetrologyAreaPagesComponent implements OnInit {
   private getDataPhysicsTodos(numPage: number = 0) {
     this.totalItems = 0
     this.servicioData=[];
+    this.totalItems = 0;
     this.kcdbService.getQuickSearch(
-      numPage,"mexico",["cmcDomain.PHYSICS"],20,).subscribe(
+      numPage,20,"mexico").subscribe(
       res => {
         this.numPaginas = res.totalPages;
-        this.totalItems =res.totalElements;
+        this.totalItems = res.totalElements;
+        this.selectNumber = res.pageNumber +1;
         res.data = res.data.map(res=> {
           const tempDiv = document.createElement('div');
+          const tempDiv2 = document.createElement('div');
           tempDiv.innerHTML = res.cmc.unit;
+          tempDiv2.innerHTML = res.radiationSpecification;
           res.cmc.unit = tempDiv.innerText;
-
+          res.radiationSpecification = tempDiv2.innerText;
           return res
         })
+
 
         this.servicioData = res.data;
       }
@@ -132,7 +146,7 @@ export class MetrologyAreaPagesComponent implements OnInit {
     if (this.areaMetrologiaId == "0") {
       this.getDataPhysicsTodos();
       this.branch =[];
-      this.numPaginas=0;
+      this.numPaginas = 0;
       return
     }
     this.numPaginas = 0;
@@ -162,7 +176,7 @@ export class MetrologyAreaPagesComponent implements OnInit {
 
   selectBranch() {
     this.numPaginas = 0;
-    this.totalItems = 0;
+    this.selectNumber = 0;
     const select = this.branch.filter(e => e.id.toString() == this.branchId)[0];
     this.branchLabel = select.label;
     this.getDataPhysics();
@@ -175,28 +189,6 @@ export class MetrologyAreaPagesComponent implements OnInit {
     // })
   }
 
-  selectService() {
-    const select = this.service.filter(e => e.id.toString() == this.serviceId)[0];
-    this.kcdbService.getSubService(this.serviceId.trim()).subscribe(result => {
-      this.subService = result.referenceData;
-    })
-  }
-
-  selectSubService() {
-    const select = this.subService.filter(e => e.id.toString() == this.subServiceId)[0];
-    this.dos = select.label;
-    this.kcdbService.getIdividualService(this.subServiceId.trim()).subscribe(
-      results => {
-        this.serviceIndividual = results.referenceData;
-      }
-    )
-  }
-
-  selectServiceIndividual() {
-    const select = this.serviceIndividual.filter(e => e.id.toString() == this.serviceIndividualId)[0];
-    this.tres = select.label;
-  }
-
   onClick(id: number) {
     this.selectServiceModal = this.servicioData.filter((e: any) => e.id == id)[0];
     const tempDiv = document.createElement('div');
@@ -205,21 +197,20 @@ export class MetrologyAreaPagesComponent implements OnInit {
 
   debounceNum(num: number) {
     num = num - 1;
-    this.sin = false;
-    if (this.numPaginas==1) {
+    if (this.numPaginas == 1) {
       return
     }
     this.servicioData = [];
     this.selectNumber = num + 1;
 
-    if (this.areaMetrologiaId === "0") {
+    if (this.areaMetrologiaId == "0") {
       this.getDataPhysicsTodos(num);
+
       return
     }
 
     this.getDataPhysics(num);
   }
-
   isVacio(query: string){
     query = query.trim();
     if (query == '') {
@@ -232,22 +223,25 @@ export class MetrologyAreaPagesComponent implements OnInit {
 
   search(query: string) {
     query = query.trim();
-    this.servicioData =[];
+    this.servicioData = [];
     this.numPaginas = 0;
     this.selectNumber = 0;
     this.totalItems = 0;
-    this.kcdbService.getQuickSearch(0,query,["cmcDomain.PHYSICS"],20).subscribe(
-      res=>{
-        if (res.data.length==0) {
-          this.sin = true;
-          return
-        }
-        this.totalItems= res.totalElements;
-        this.servicioData = res.data;
-        const id = this.areaMetrologia.filter(e=> e.label == this.servicioData[0].metrologyAreaLabel);
-        this.areaMetrologiaId = id[0].id.toString()
+
+    this.kcdbService.getQuickSearch(0,20,query).subscribe(res=>{
+
+      if (res.data.length == 0) {
+        this.sin = true;
+        return
       }
-    )
+      this.totalItems = res.totalElements;
+      this.servicioData = res.data;
+      const id = this.areaMetrologia.filter(e=> e.label == this.servicioData[0].metrologyAreaLabel);
+      this.areaMetrologiaId = id[0].id.toString()
+
+
+
+    })
 
     // const filter = JSON.parse(localStorage.getItem("servicios")!) as any[]
 
@@ -265,5 +259,6 @@ export class MetrologyAreaPagesComponent implements OnInit {
   quitar() {
     this.selectServiceModal = undefined;
   }
+
 
 }

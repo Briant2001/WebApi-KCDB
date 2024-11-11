@@ -5,19 +5,21 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
-import { MetrologyAreaPagesComponent } from './pages/domain-physics/domains-physics.pages.component';
+import { MetrologyAreaPagesComponent } from './pages/cmcs/domain-physics/domains-physics.pages.component';
 import { FormsModule } from '@angular/forms';
 import { ModalServiceComponent } from './components/modal-service/modal-service.component';
-import { DomainsPagesComponent } from './pages/domains-pages/domains-pages.component';
+import { DomainsPagesComponent } from './pages/cmcs/domains-pages/domains-pages.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
-import { DomainCHEMBIOComponent } from './pages/domain-chembio/domain-chembio.component';
+import { DomainCHEMBIOComponent } from './pages/cmcs/domain-chembio/domain-chembio.component';
 import { ModalServiceCheComponent } from './components/modal-service-che/modal-service-che.component';
-import { DomainsRadiationComponent } from './pages/domains-radiation/domains-radiation.component';
+import { DomainsRadiationComponent } from './pages/cmcs/domains-radiation/domains-radiation.component';
 import { CambiarLenguajePipe } from './pipes/cambiar-espanol.pipe';
 import { ModalServiceRadiationComponent } from './components/modal-service-radiation/modal-service-radiation.component';
 import { EstatusPipe } from './pipes/status.pipe';
 import { TotalServicePipe } from './pipes/total-servicios.pipe';
 import { ChembioPipe } from './pipes/total-servicios-chembio.pipe';
+import { LayoutComponent } from './layout/layout.component';
+import { MetrologyArePageComponent } from './pages/comparison/metrology-are-page/metrology-are-page.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { ChembioPipe } from './pipes/total-servicios-chembio.pipe';
     ModalServiceRadiationComponent,
     EstatusPipe,
     TotalServicePipe,
-    ChembioPipe
+    ChembioPipe,
+    MetrologyArePageComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,

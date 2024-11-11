@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Branchs, Datum, Domains, QuickSearch, ReferenceDatum, Servicio } from '../../interfaces/kcdb.models';
-import { KCDBServices } from '../../services/domains-physics.service';
+import { Branchs, Datum, Domains, QuickSearch, ReferenceDatum, Servicio } from '../../../interfaces/kcdb.models';
+import { KCDBServices } from '../../../services/domains-physics.service';
 import { Router } from '@angular/router';
-import { DomainCHEMBIOService } from '../../services/domain-chem-bio.service';
-import { RadiationKCDBService } from '../../services/domain-radiation.service';
-import { DataAnalitos } from '../../interfaces/kcdbChe.interface';
+import { DomainCHEMBIOService } from '../../../services/domain-chem-bio.service';
+import { RadiationKCDBService } from '../../../services/domain-radiation.service';
+import { DataAnalitos } from '../../../interfaces/kcdbChe.interface';
 import { count } from 'rxjs';
 
 interface ServicioTotal {

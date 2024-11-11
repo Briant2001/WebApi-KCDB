@@ -1,16 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DomainsPagesComponent } from './pages/domains-pages/domains-pages.component';
-import { MetrologyAreaPagesComponent } from './pages/domain-physics/domains-physics.pages.component';
-import { DomainCHEMBIOComponent } from './pages/domain-chembio/domain-chembio.component';
+import { DomainsPagesComponent } from './pages/cmcs/domains-pages/domains-pages.component';
+import { MetrologyAreaPagesComponent } from './pages/cmcs/domain-physics/domains-physics.pages.component';
+import { DomainCHEMBIOComponent } from './pages/cmcs/domain-chembio/domain-chembio.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
-import { DomainsRadiationComponent } from './pages/domains-radiation/domains-radiation.component';
+import { DomainsRadiationComponent } from './pages/cmcs/domains-radiation/domains-radiation.component';
+import { LayoutComponent } from './layout/layout.component';
 
 const routes:Routes = [
 
   {
     path:"kcdb",
+    component:LayoutComponent,
     children:[
+
       {
         path:"domains",
         component:DomainsPagesComponent

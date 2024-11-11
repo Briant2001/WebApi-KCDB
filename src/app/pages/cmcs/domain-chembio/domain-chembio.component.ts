@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { KCDBServices } from '../../services/domains-physics.service';
+import { KCDBServices } from '../../../services/domains-physics.service';
 import { ActivatedRoute } from '@angular/router';
-import { ReferenceDatum, Servicio } from '../../interfaces/kcdb.models';
+import { ReferenceDatum, Servicio } from '../../../interfaces/kcdb.models';
 import { Subject } from 'rxjs';
-import { Datum } from '../../interfaces/kcdbChe.interface';
-import { DomainCHEMBIOService } from '../../services/domain-chem-bio.service';
+import { Datum } from '../../../interfaces/kcdbChe.interface';
+import { DomainCHEMBIOService } from '../../../services/domain-chem-bio.service';
 
 @Component({
   selector: 'app-domain-chembio',
