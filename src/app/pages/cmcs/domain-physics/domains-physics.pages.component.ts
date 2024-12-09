@@ -3,6 +3,7 @@ import { KCDBServices } from '../../../services/domains-physics.service';
 import { ActivatedRoute } from '@angular/router';
 import { Datum, ReferenceDatum, Servicio } from '../../../interfaces/kcdb.models';
 import { Subject } from 'rxjs';
+import { ExportInXlsxService } from '../../../services/export-file.service';
 
 @Component({
   selector: 'app-metrology-area-pages',
@@ -30,7 +31,7 @@ export class MetrologyAreaPagesComponent implements OnInit {
 
   public branch: ReferenceDatum[] = []
   public branchId: string = "0";
-  private branchLabel?: string;
+  private branchLabel: string="";
 
   public service: ReferenceDatum[] = []
   public serviceId: string = "0";
@@ -52,7 +53,9 @@ export class MetrologyAreaPagesComponent implements OnInit {
   private keywords: string = "mexico"
   public selectNumber: number = 1;
 
-  constructor(private kcdbService: KCDBServices, private routerActive: ActivatedRoute) { }
+  constructor(private kcdbService: KCDBServices,
+    private routerActive: ActivatedRoute,
+    private exportXlsxService:ExportInXlsxService) { }
 
   ngOnInit(): void {
     this.routerActive.params.subscribe(param => {
@@ -92,7 +95,7 @@ export class MetrologyAreaPagesComponent implements OnInit {
           return
         }
         this.numPaginas = res.totalPages;
-        this.totalItems =res.totalElements;
+        this.totalItems = res.totalElements;
         this.selectNumber = res.pageNumber +1;
         res.data = res.data.map(res=> {
           const tempDiv = document.createElement('div');
@@ -260,6 +263,52 @@ export class MetrologyAreaPagesComponent implements OnInit {
     //     String(e.subServiceValue).toLowerCase().includes(query.toLowerCase())
     // })
 
+  }
+
+  exportXLSX(){
+    this.kcdbService.getSearchDataPhysics({
+      page: this.selectNumber-1,
+      pageSize: 20,
+      metrologyAreaLabel: this.metrologyAreaLabel!,
+      keywords: this.keywords,
+      branchLabel:this.branchLabel
+    }, this.area).subscribe(
+      res => {
+        if (res.data.length == 0) {
+          return
+        }
+
+        const area = this.areaMetrologia.filter(e=> e.id.toString() == this.areaMetrologiaId);
+        const branh = this.branch.filter(e=> e.id.toString() == this.branchId);
+        const fileName = `Fisica_${this.metrologyAreaLabel}_${(branh.length==1)?branh[0].value:""}_${new Date().getFullYear()}.xlsx`;
+        const title =`CMC: ${area[0].value} - ${(branh.length==1)?branh[0].value:""}`;
+        this.exportXlsxService.exportToExcel(res.data,fileName,title)
+      }
+    )
+  }
+
+  exportXLSXTodo(){
+    // this.getDataPhysics();
+
+    this.kcdbService.getSearchDataPhysics({
+      page: 0,
+      pageSize: this.totalItems,
+      metrologyAreaLabel: this.metrologyAreaLabel!,
+      keywords: this.keywords,
+      branchLabel:this.branchLabel
+    }, this.area).subscribe(
+      res => {
+        if (res.data.length == 0) {
+          return
+        }
+
+        const area = this.areaMetrologia.filter(e=> e.id.toString() == this.areaMetrologiaId);
+        const branh = this.branch.filter(e=> e.id.toString() == this.branchId);
+        const fileName = `Fisica_${this.metrologyAreaLabel}_${(branh.length==1)?branh[0].value:""}_${new Date().getFullYear()}.xlsx`;
+        const title =`CMC: ${area[0].value} - ${(branh.length==1)?branh[0].value:""}`;
+        this.exportXlsxService.exportToExcel(res.data,fileName,title)
+      }
+    )
   }
 
   quitar() {

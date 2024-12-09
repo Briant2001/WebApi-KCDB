@@ -99,13 +99,13 @@ export class DomainsPagesComponent implements AfterViewInit, OnInit{
 
     switch (area) {
       case "PHYSICS":
-        this.routes.navigateByUrl(`kcdb/metrologyArea/physics/${area}`);
+        this.routes.navigateByUrl(`kcdb/CMCS/metrologyArea/physics/${area}`);
         break
       case "CHEM-BIO":
-        this.routes.navigateByUrl(`kcdb/metrologyArea/chem-bio/${area}`);
+        this.routes.navigateByUrl(`kcdb/CMCS/metrologyArea/chem-bio/${area}`);
         break
       case "RADIATION":
-        this.routes.navigateByUrl(`kcdb/metrologyArea/radiation/${area}`);
+        this.routes.navigateByUrl(`kcdb/CMCS/metrologyArea/radiation/${area}`);
         break
       default:
         break;

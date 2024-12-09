@@ -19,7 +19,12 @@ import { EstatusPipe } from './pipes/status.pipe';
 import { TotalServicePipe } from './pipes/total-servicios.pipe';
 import { ChembioPipe } from './pipes/total-servicios-chembio.pipe';
 import { LayoutComponent } from './layout/layout.component';
-import { MetrologyArePageComponent } from './pages/comparison/metrology-are-page/metrology-are-page.component';
+import { HomeComponent } from './pages/home/home.component';
+import { LayoutCMCSComponent } from './pages/cmcs/layout/layout.component';
+import { LayoutComparisonsComponent } from './pages/comparison/layout-comparisons/layout-comparisons.component';
+import { MetrologyAreaPageComponent } from './pages/comparison/metrology-area-page/metrology-area-page.component';
+import { GoogleChartsModule } from 'angular-google-charts';
+import { GraficaKcbdComponent } from './components/grafica-kcbd/grafica-kcbd.component';
 
 @NgModule({
   declarations: [
@@ -36,8 +41,12 @@ import { MetrologyArePageComponent } from './pages/comparison/metrology-are-page
     EstatusPipe,
     TotalServicePipe,
     ChembioPipe,
-    MetrologyArePageComponent,
-    LayoutComponent
+    LayoutComponent,
+    HomeComponent,
+    LayoutCMCSComponent,
+    LayoutComparisonsComponent,
+    MetrologyAreaPageComponent,
+    GraficaKcbdComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +54,7 @@ import { MetrologyArePageComponent } from './pages/comparison/metrology-are-page
     AppRoutingModule,
     HttpClientModule,
     CommonModule,
+    GoogleChartsModule
 
   ],
   providers: [],

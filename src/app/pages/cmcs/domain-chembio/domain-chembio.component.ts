@@ -5,6 +5,7 @@ import { ReferenceDatum, Servicio } from '../../../interfaces/kcdb.models';
 import { Subject } from 'rxjs';
 import { Datum } from '../../../interfaces/kcdbChe.interface';
 import { DomainCHEMBIOService } from '../../../services/domain-chem-bio.service';
+import { ExportInXlsxService } from '../../../services/export-file.service';
 
 @Component({
   selector: 'app-domain-chembio',
@@ -20,10 +21,6 @@ export class DomainCHEMBIOComponent {
   public servicioData: Datum[] = [];
   public selectServiceModal?: any;
 
-  private physicsCode?: string;
-
-  private uno = "";
-  private dos = "";
   public sin = false;
 
   public areaMetrologia: ReferenceDatum[] = []
@@ -54,12 +51,12 @@ export class DomainCHEMBIOComponent {
 
   constructor(private kcdbService: KCDBServices,
     private kcdbChemService: DomainCHEMBIOService,
-    private routerActive: ActivatedRoute) { }
+    private routerActive: ActivatedRoute,
+    private exportXlsxService:ExportInXlsxService) { }
 
   ngOnInit(): void {
     this.routerActive.params.subscribe(param => {
       this.area = param["id"];
-
       this.kcdbService.getMetrologyArea(this.area).subscribe(
         results => {
 
@@ -186,23 +183,23 @@ export class DomainCHEMBIOComponent {
 
   }
 
-  selectService() {
-    const select = this.service.filter(e => e.id.toString() == this.serviceId)[0];
-    this.uno = select.label;
-    this.kcdbService.getSubService(this.serviceId.trim()).subscribe(result => {
-      this.subService = result.referenceData;
-    })
-  }
+  // selectService() {
+  //   const select = this.service.filter(e => e.id.toString() == this.serviceId)[0];
+  //   this.uno = select.label;
+  //   this.kcdbService.getSubService(this.serviceId.trim()).subscribe(result => {
+  //     this.subService = result.referenceData;
+  //   })
+  // }
 
-  selectSubService() {
-    const select = this.subService.filter(e => e.id.toString() == this.subServiceId)[0];
-    this.dos = select.label;
-    this.kcdbService.getIdividualService(this.subServiceId.trim()).subscribe(
-      results => {
-        this.serviceIndividual = results.referenceData;
-      }
-    )
-  }
+  // selectSubService() {
+  //   const select = this.subService.filter(e => e.id.toString() == this.subServiceId)[0];
+  //   this.dos = select.label;
+  //   this.kcdbService.getIdividualService(this.subServiceId.trim()).subscribe(
+  //     results => {
+  //       this.serviceIndividual = results.referenceData;
+  //     }
+  //   )
+  // }
 
   selectServiceIndividual() {
     const select = this.serviceIndividual.filter(e => e.id.toString() == this.serviceIndividualId)[0];
@@ -257,6 +254,58 @@ export class DomainCHEMBIOComponent {
     })
 
   }
+
+  exportXLSX(){
+
+    this.kcdbChemService.getSearchDataCHEMBIO({
+      page: this.selectNumber-1,
+      pageSize: 20,
+      metrologyAreaLabel: this.metrologyAreaLabel,
+      keywords: this.keywords,
+      categoryLabel: this.categoriaLabel
+    }).subscribe(
+      res => {
+        if (res.data.length == 0) {
+
+          return
+        }
+
+        const area = this.areaMetrologia.filter(e=> e.id.toString() == this.areaMetrologiaId);
+        const categoria = this.categorias.filter(e=> e.value == this.categoriaId);
+        const fileName = `${this.metrologyAreaLabel}_${(categoria.length==1)?categoria[0].value:""}_${new Date().getFullYear()}.xlsx`;
+        const title =`CMC: ${area[0].value} - ${(categoria.length==1)?categoria[0].value:""}`;
+        this.exportXlsxService.exportToExcel(res.data,fileName,title)
+
+      }
+    )
+
+  }
+
+  exportXLSXTodo(){
+    this.kcdbChemService.getSearchDataCHEMBIO({
+      page: 0,
+      pageSize: this.totalItems,
+      metrologyAreaLabel: this.metrologyAreaLabel,
+      keywords: this.keywords,
+      categoryLabel: this.categoriaLabel
+    }).subscribe(
+      res => {
+        if (res.data.length == 0) {
+
+          return
+        }
+
+        const area = this.areaMetrologia.filter(e=> e.id.toString() == this.areaMetrologiaId);
+        const categoria = this.categorias.filter(e=> e.value == this.categoriaId);
+        const fileName = `${this.metrologyAreaLabel}_${(categoria.length==1)?categoria[0].value:""}_${new Date().getFullYear()}.xlsx`;
+        const title =`CMC: ${area[0].value} - ${(categoria.length==1)?categoria[0].value:""}`;
+        this.exportXlsxService.exportToExcel(res.data,fileName,title)
+
+      }
+    )
+
+  }
+
 
   quitar() {
     this.selectServiceModal = undefined;
