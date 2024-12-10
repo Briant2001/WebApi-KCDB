@@ -89,6 +89,9 @@ export class MetrologyAreaPageComponent {
         tempDiv.innerHTML = res.parameters
         res.parameters = tempDiv.innerText;
 
+        const tempDiv2 = document.createElement('div');
+        tempDiv2.innerHTML = res.description
+        res.description = tempDiv2.innerText;
         return res
       })
 
