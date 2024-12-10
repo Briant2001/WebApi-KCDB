@@ -4,6 +4,7 @@ import {  ReferenceDatum, Servicio } from '../../../interfaces/kcdb.models';
 import { ActivatedRoute } from '@angular/router';
 import { ComparisonsService } from '../../../services/comparisons.service';
 import { Comparisons, Datum, ParamasSearchComparisons, SubFieldAM } from '../../../interfaces/kcdb-comparisons.interface';
+import { ExportInXlsxService } from '../../../services/export-file.service';
 
 @Component({
   selector: 'app-metrology-area-page',
@@ -39,11 +40,13 @@ export class MetrologyAreaPageComponent {
   public sin: boolean = false;
 
   public areaMetrologia: ReferenceDatum[] = []
-  public areaMetrologiaId: string = ""
+  public areaMetrologiaId: string = "Todos"
   private metrologyAreaLabel:number = 0;
+  private nombreArea:string = "Todos";
 
   public branch: SubFieldAM[] = []
   public branchId: string = "";
+  public nombreBranch: string = "";
 
   public keyComparison:string="";
   public piloto:string="CENAM";
@@ -52,7 +55,9 @@ export class MetrologyAreaPageComponent {
   public totalItems: number = 0;
   public selectNumber: number = 1;
 
-  constructor(private comparisonsService: ComparisonsService, private routerActive: ActivatedRoute) { }
+  constructor(private comparisonsService: ComparisonsService,
+    private routerActive: ActivatedRoute,
+    private exportXlsxService:ExportInXlsxService) { }
 
   ngOnInit(): void {
 
@@ -78,6 +83,15 @@ export class MetrologyAreaPageComponent {
     this.comparisonsService.getDataComparisons(
       this.params
     ).subscribe(results => {
+      //Limpiamos texto
+      results.data = results.data.map(res=> {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = res.parameters
+        res.parameters = tempDiv.innerText;
+
+        return res
+      })
+
       this.comparisonsDataALL = results.data;
 
       if (this.piloto === "CENAM") {
@@ -90,6 +104,9 @@ export class MetrologyAreaPageComponent {
 
         return
       }
+
+
+
       this.totalItems = results.allCmcs.length;
       this.comparisonsData = this.getPageItems(1)
     })
@@ -117,14 +134,14 @@ export class MetrologyAreaPageComponent {
     const select = this.areaMetrologia.filter(e => e.id.toString() == this.areaMetrologiaId)[0];
     this.metrologyAreaLabel = select.id;
     this.params.areaId = this.metrologyAreaLabel.toString();
-
+    this.nombreArea = select.value;
     this.comparisonsService.getSubField(this.areaMetrologiaId.trim()).subscribe(
       result => {
         if (result) {
           this.branch = result
         }
       }
-    )
+    );
 
     // this.getDataPhysics();
 
@@ -132,6 +149,9 @@ export class MetrologyAreaPageComponent {
 
   selectBranch() {
     this.params.subfieldId = this.branchId;
+    const select = this.branch.filter(e=>e.id==this.branchId)[0];
+    this.nombreBranch = select.value;
+
   }
 
   selectComparison(){
@@ -169,6 +189,7 @@ export class MetrologyAreaPageComponent {
   getPageItems(page: number) {
     const startIndex = (page - 1) * 20;
     const endIndex = startIndex + 20;
+
     return this.comparisonsDataALL .slice(startIndex, endIndex);
   }
 
@@ -196,5 +217,25 @@ export class MetrologyAreaPageComponent {
 
   }
 
+  exportXLSXTodo(btn:HTMLButtonElement){
+    if (this.comparisonsDataALL.length ==0) {
+      return
+    }
+    btn.style.cursor = "wait";
+
+    const time = setInterval(() => {
+      const fileName = `Comparaciones_[${this.nombreArea}]`+
+                                      `${(this.nombreBranch=="")?"":"_"+this.nombreBranch}`+
+                                      `${(this.keyComparison=="")?"":"_"+this.keyComparison}`+
+                                      `${(this.piloto=="CENAM")?"_"+this.piloto:""}`+
+                                      `${"_"+new Date().getFullYear()}.xlsx`
+
+      this.exportXlsxService.exportToExcel(this.comparisonsDataALL,fileName, `Comparaciones_${this.areaMetrologiaId}`);
+
+      btn.style.cursor ="pointer";
+      clearInterval(time);
+    }, 100);
+
+  }
 
 }

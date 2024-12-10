@@ -119,7 +119,6 @@ export class DomainCHEMBIOComponent {
     )
   }
 
-
   private getDataChemTodos(num: number = 0) {
     this.servicioData = [];
     this.kcdbChemService.getQuickSearch(num, "mexico",20).subscribe(
@@ -182,24 +181,6 @@ export class DomainCHEMBIOComponent {
     this.getDataChem()
 
   }
-
-  // selectService() {
-  //   const select = this.service.filter(e => e.id.toString() == this.serviceId)[0];
-  //   this.uno = select.label;
-  //   this.kcdbService.getSubService(this.serviceId.trim()).subscribe(result => {
-  //     this.subService = result.referenceData;
-  //   })
-  // }
-
-  // selectSubService() {
-  //   const select = this.subService.filter(e => e.id.toString() == this.subServiceId)[0];
-  //   this.dos = select.label;
-  //   this.kcdbService.getIdividualService(this.subServiceId.trim()).subscribe(
-  //     results => {
-  //       this.serviceIndividual = results.referenceData;
-  //     }
-  //   )
-  // }
 
   selectServiceIndividual() {
     const select = this.serviceIndividual.filter(e => e.id.toString() == this.serviceIndividualId)[0];
@@ -281,7 +262,8 @@ export class DomainCHEMBIOComponent {
 
   }
 
-  exportXLSXTodo(){
+  exportXLSXTodo(btn:HTMLButtonElement){
+    btn.style.cursor ="wait"
     this.kcdbChemService.getSearchDataCHEMBIO({
       page: 0,
       pageSize: this.totalItems,
@@ -290,8 +272,8 @@ export class DomainCHEMBIOComponent {
       categoryLabel: this.categoriaLabel
     }).subscribe(
       res => {
-        if (res.data.length == 0) {
 
+        if (res.data.length == 0) {
           return
         }
 
@@ -299,13 +281,12 @@ export class DomainCHEMBIOComponent {
         const categoria = this.categorias.filter(e=> e.value == this.categoriaId);
         const fileName = `${this.metrologyAreaLabel}_${(categoria.length==1)?categoria[0].value:""}_${new Date().getFullYear()}.xlsx`;
         const title =`CMC: ${area[0].value} - ${(categoria.length==1)?categoria[0].value:""}`;
-        this.exportXlsxService.exportToExcel(res.data,fileName,title)
-
+        this.exportXlsxService.exportToExcel(res.data,fileName,title);
+        btn.style.cursor ="pointer";
       }
     )
 
   }
-
 
   quitar() {
     this.selectServiceModal = undefined;

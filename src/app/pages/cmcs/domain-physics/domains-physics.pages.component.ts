@@ -287,9 +287,9 @@ export class MetrologyAreaPagesComponent implements OnInit {
     )
   }
 
-  exportXLSXTodo(){
+  exportXLSXTodo(btn:HTMLButtonElement){
     // this.getDataPhysics();
-
+    btn.style.cursor ="wait"
     this.kcdbService.getSearchDataPhysics({
       page: 0,
       pageSize: this.totalItems,
@@ -306,7 +306,8 @@ export class MetrologyAreaPagesComponent implements OnInit {
         const branh = this.branch.filter(e=> e.id.toString() == this.branchId);
         const fileName = `Fisica_${this.metrologyAreaLabel}_${(branh.length==1)?branh[0].value:""}_${new Date().getFullYear()}.xlsx`;
         const title =`CMC: ${area[0].value} - ${(branh.length==1)?branh[0].value:""}`;
-        this.exportXlsxService.exportToExcel(res.data,fileName,title)
+        this.exportXlsxService.exportToExcel(res.data,fileName,title);
+        btn.style.cursor ="pointer";
       }
     )
   }

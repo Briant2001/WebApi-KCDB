@@ -1,5 +1,6 @@
-<div class="-z-50 flex top-0 h-[calc(20%)] max-[1400px]:h-[calc(100px)] min-[1400px]:fixed flex-col justify-around items-center p-4 bg-[#004382] text-slate-100  w-full"
-    style=" background-image: url(https://www.bipm.org/kcdb/static/img/header-bg-11bf7d6685fa30bfc47c43738128b3c3.jpg);">
+<div
+  class="-z-50 flex top-0 h-[calc(20%)] max-[1400px]:h-[calc(100px)] min-[1400px]:fixed flex-col justify-around items-center p-4 bg-[#004382] text-slate-100  w-full"
+  style=" background-image: url(https://www.bipm.org/kcdb/static/img/header-bg-11bf7d6685fa30bfc47c43738128b3c3.jpg);">
 
   <div class="w-full flex flex-row items-center justify-between absolute">
     <div class="ml-3">
@@ -29,7 +30,9 @@
   </div>
 </div>
 
-<div class="px-5 max-[800px]:mt-3 min-[800px]:mt-20 min-[1400px]:mt-56 max-[1400px]:h-[calc(82%-144px)] h-[calc(90%-224px-20px)] flex flex-col" style="z-index: 0;">
+<div
+  class="px-5 max-[800px]:mt-3 min-[800px]:mt-20 min-[1400px]:mt-56 max-[1400px]:h-[calc(82%-144px)] h-[calc(90%-224px-20px)] flex flex-col"
+  style="z-index: 0;">
 
   <div class="intro-y flex flex-row sm:flex-nowrap items-center mt-3">
     <a routerLink="../../../domains" class="btn btn-primary shadow-md mr-2"> ⬅ </a>
@@ -50,11 +53,13 @@
           </div>
         </div>
         <div class="w-60 relative text-slate-500 mr-2 ">
-          <input #input type="text" class="form-control w-56 box pr-11 max-[700px]:pr-5 max-[700px]:w-72" placeholder="Busqueda por CMC ID"
-            (keyup.enter)="search(input.value)" (input)="isVacio(input.value)">
-          <svg (click)="search(input.value)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="search"
-            class="lucide cursor-pointer lucide-search w-4 h-4 absolute my-auto inset-y-0 mr-2 right-2.5 max-[700px]:-right-10" data-lucide="search">
+          <input #input type="text" class="form-control w-56 box pr-11 max-[700px]:pr-5 max-[700px]:w-72"
+            placeholder="Busqueda por CMC ID" (keyup.enter)="search(input.value)" (input)="isVacio(input.value)">
+          <svg (click)="search(input.value)" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" icon-name="search"
+            class="lucide cursor-pointer lucide-search w-4 h-4 absolute my-auto inset-y-0 mr-2 right-2.5 max-[700px]:-right-10"
+            data-lucide="search">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
@@ -69,10 +74,8 @@
 
   <div class="flex flex-row items-center justify-between">
     <p class="mt-3"> {{selectNumber}} de {{numPaginas}} paginas</p>
-    <div >
-      <button class="btn btn-secondary mr-2" (click)="exportXLSXTodo()">Exportar Todo .xlsx</button>
-      <button class="btn btn-primary" (click)="exportXLSX()">Exportar .xlsx</button>
-
+    <div>
+      <button #btn class="btn btn-primary mr-2 cursor-wait" (click)="exportXLSXTodo(btn)">Exportar todo .xlsx</button>
     </div>
   </div>
 
@@ -89,7 +92,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="intro-x cursor-pointer" *ngFor="let item of servicioData; let i = index"  (click)="onClick(item.id)">
+        <tr class="intro-x cursor-pointer" *ngFor="let item of servicioData; let i = index" (click)="onClick(item.id)">
           <td class="font-medium w-11 text-center">
             <a class="cursor-pointer">
               {{item.kcdbCode}}
@@ -118,26 +121,28 @@
 
     <ng-template #n>
       <div [ngSwitch]="sin">
-        <div *ngSwitchCase="false"><div class="w-full flex flex-row justify-around items-center">
-          <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" stroke="black">
-            <g fill="none" fill-rule="evenodd" stroke-width="2">
-              <circle cx="22" cy="22" r="1">
-                <animate attributeName="r" begin="0s" dur="1.8s" values="1; 20" calcMode="spline" keyTimes="0; 1"
-                  keySplines="0.165, 0.84, 0.44, 1" repeatCount="indefinite" />
-                <animate attributeName="stroke-opacity" begin="0s" dur="1.8s" values="1; 0" calcMode="spline"
-                  keyTimes="0; 1" keySplines="0.3, 0.61, 0.355, 1" repeatCount="indefinite" />
-              </circle>
-              <circle cx="22" cy="22" r="1">
-                <animate attributeName="r" begin="-0.9s" dur="1.8s" values="1; 20" calcMode="spline" keyTimes="0; 1"
-                  keySplines="0.165, 0.84, 0.44, 1" repeatCount="indefinite" />
-                <animate attributeName="stroke-opacity" begin="-0.9s" dur="1.8s" values="1; 0" calcMode="spline"
-                  keyTimes="0; 1" keySplines="0.3, 0.61, 0.355, 1" repeatCount="indefinite" />
-              </circle>
-            </g>
-          </svg>
-        </div></div>
+        <div *ngSwitchCase="false">
+          <div class="w-full flex flex-row justify-around items-center">
+            <svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" stroke="black">
+              <g fill="none" fill-rule="evenodd" stroke-width="2">
+                <circle cx="22" cy="22" r="1">
+                  <animate attributeName="r" begin="0s" dur="1.8s" values="1; 20" calcMode="spline" keyTimes="0; 1"
+                    keySplines="0.165, 0.84, 0.44, 1" repeatCount="indefinite" />
+                  <animate attributeName="stroke-opacity" begin="0s" dur="1.8s" values="1; 0" calcMode="spline"
+                    keyTimes="0; 1" keySplines="0.3, 0.61, 0.355, 1" repeatCount="indefinite" />
+                </circle>
+                <circle cx="22" cy="22" r="1">
+                  <animate attributeName="r" begin="-0.9s" dur="1.8s" values="1; 20" calcMode="spline" keyTimes="0; 1"
+                    keySplines="0.165, 0.84, 0.44, 1" repeatCount="indefinite" />
+                  <animate attributeName="stroke-opacity" begin="-0.9s" dur="1.8s" values="1; 0" calcMode="spline"
+                    keyTimes="0; 1" keySplines="0.3, 0.61, 0.355, 1" repeatCount="indefinite" />
+                </circle>
+              </g>
+            </svg>
+          </div>
+        </div>
         <div *ngSwitchCase="true">
-          <p  class="text-sm text-gray-500 font-bold">No se encontraron resultados</p>
+          <p class="text-sm text-gray-500 font-bold">No se encontraron resultados</p>
         </div>
       </div>
 
