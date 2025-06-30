@@ -73,7 +73,23 @@
                 <option value="CENAM">CENAM</option>
               </select>
             </div>
+            <div>
+              <label for="">Estado</label>
+              <select [(ngModel)]="areaMetrologiaId" (change)="selectArea()"
+                class="bg-gray-50 m-1 border w-72 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 ">
+                <option value="Todos">Todos</option>
+                <option *ngFor="let item of areaMetrologia" [value]="item.id">{{item.label +' - '+ item.value}}</option>
+              </select>
+            </div>
+            <div>
+              <label for="">Fecha de medición</label>
+              <select [(ngModel)]="branchId" (change)="selectBranch()"
+                class="bg-gray-50 m-1 w-72 ml-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 max-[850px]:mt-2">
+                <option value="">Todos</option>
+                <option *ngFor="let item of branch" [value]="item.id">{{item.id +' - '+ item.value}}</option>
+              </select>
 
+            </div>
             <div class="bg-gray-50 m-1 w-72 ml-1 text-sm rounded-lg max-[850px]:mt-2 flex flex-col">
               <span class="" style="visibility: hidden;">sss</span>
               <button class="btn btn-primary max-[600px]:w-full" (click)="aplicar()">Aplicar</button>
